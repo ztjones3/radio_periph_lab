@@ -1,86 +1,37 @@
 library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+	use ieee.std_logic_1164.all;
+	use ieee.numeric_std.all;
+	use ieee.std_logic_unsigned.all;
 
 entity full_radio_v1_0_S00_AXI is
 	generic (
-		-- Users to add parameters here
-
-		-- User parameters ends
-		-- Do not modify the parameters beyond this line
-
-		-- Width of S_AXI data bus
-		C_S_AXI_DATA_WIDTH	: integer	:= 32;
-		-- Width of S_AXI address bus
-		C_S_AXI_ADDR_WIDTH	: integer	:= 4
+		C_S_AXI_DATA_WIDTH	 : integer := 32; -- Width of S_AXI data bus
+		C_S_AXI_ADDR_WIDTH	 : integer := 4   -- Width of S_AXI address bus
 	);
 	port (
-		-- Users to add ports here
-        m_axis_tdata : out std_logic_vector(15 downto 0);
-        m_axis_tvalid : out std_logic;
-		-- User ports ends
-		-- Do not modify the ports beyond this line
-
-		-- Global Clock Signal
-		S_AXI_ACLK	: in std_logic;
-		-- Global Reset Signal. This Signal is Active LOW
-		S_AXI_ARESETN	: in std_logic;
-		-- Write address (issued by master, acceped by Slave)
-		S_AXI_AWADDR	: in std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
-		-- Write channel Protection type. This signal indicates the
-    		-- privilege and security level of the transaction, and whether
-    		-- the transaction is a data access or an instruction access.
-		S_AXI_AWPROT	: in std_logic_vector(2 downto 0);
-		-- Write address valid. This signal indicates that the master signaling
-    		-- valid write address and control information.
-		S_AXI_AWVALID	: in std_logic;
-		-- Write address ready. This signal indicates that the slave is ready
-    		-- to accept an address and associated control signals.
-		S_AXI_AWREADY	: out std_logic;
-		-- Write data (issued by master, acceped by Slave) 
-		S_AXI_WDATA	: in std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
-		-- Write strobes. This signal indicates which byte lanes hold
-    		-- valid data. There is one write strobe bit for each eight
-    		-- bits of the write data bus.    
-		S_AXI_WSTRB	: in std_logic_vector((C_S_AXI_DATA_WIDTH/8)-1 downto 0);
-		-- Write valid. This signal indicates that valid write
-    		-- data and strobes are available.
-		S_AXI_WVALID	: in std_logic;
-		-- Write ready. This signal indicates that the slave
-    		-- can accept the write data.
-		S_AXI_WREADY	: out std_logic;
-		-- Write response. This signal indicates the status
-    		-- of the write transaction.
-		S_AXI_BRESP	: out std_logic_vector(1 downto 0);
-		-- Write response valid. This signal indicates that the channel
-    		-- is signaling a valid write response.
-		S_AXI_BVALID	: out std_logic;
-		-- Response ready. This signal indicates that the master
-    		-- can accept a write response.
-		S_AXI_BREADY	: in std_logic;
-		-- Read address (issued by master, acceped by Slave)
-		S_AXI_ARADDR	: in std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
-		-- Protection type. This signal indicates the privilege
-    		-- and security level of the transaction, and whether the
-    		-- transaction is a data access or an instruction access.
-		S_AXI_ARPROT	: in std_logic_vector(2 downto 0);
-		-- Read address valid. This signal indicates that the channel
-    		-- is signaling valid read address and control information.
-		S_AXI_ARVALID	: in std_logic;
-		-- Read address ready. This signal indicates that the slave is
-    		-- ready to accept an address and associated control signals.
-		S_AXI_ARREADY	: out std_logic;
-		-- Read data (issued by slave)
-		S_AXI_RDATA	: out std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
-		-- Read response. This signal indicates the status of the
-    		-- read transfer.
-		S_AXI_RRESP	: out std_logic_vector(1 downto 0);
-		-- Read valid. This signal indicates that the channel is
-    		-- signaling the required read data.
-		S_AXI_RVALID	: out std_logic;
-		-- Read ready. This signal indicates that the master can
-    		-- accept the read data and response information.
-		S_AXI_RREADY	: in std_logic
+		M_AXIS_TDATA         : out std_logic_vector(31 downto 0);                       -- 
+		M_AXIS_TVALID        : out std_logic;                                           -- 
+		S_AXI_ACLK	         : in  std_logic;                                           -- Global Clock Signal
+		S_AXI_ARESETN	     : in  std_logic;                                           -- Global Reset Signal
+		S_AXI_AWADDR	     : in  std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);     -- Write address (issued by master, acceped by Slave)
+		S_AXI_AWPROT	     : in  std_logic_vector(2 downto 0);                        -- Write channel Protection type
+		S_AXI_AWVALID	     : in  std_logic;                                           -- Write address valid
+		S_AXI_AWREADY	     : out std_logic;                                           -- Write address ready
+		S_AXI_WDATA   	     : in  std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);     -- Write data (issued by master, acceped by Slave) 
+		S_AXI_WSTRB	         : in  std_logic_vector((C_S_AXI_DATA_WIDTH/8)-1 downto 0); -- Write strobes
+		S_AXI_WVALID	     : in  std_logic;                                           -- Write valid
+		S_AXI_WREADY	     : out std_logic;                                           -- Write ready
+		S_AXI_BRESP	         : out std_logic_vector(1 downto 0);                        -- Write response
+		S_AXI_BVALID	     : out std_logic;                                           -- Write response valid
+		S_AXI_BREADY	     : in  std_logic;                                           -- Response ready
+		S_AXI_ARADDR	     : in  std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);     -- Read address (issued by master, acceped by Slave)
+		S_AXI_ARPROT	     : in  std_logic_vector(2 downto 0);                        -- Protection type
+		S_AXI_ARVALID	     : in  std_logic;                                           -- Read address valid
+		S_AXI_ARREADY	     : out std_logic;                                           -- Read address ready
+		S_AXI_RDATA	         : out std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);     -- Read data (issued by slave)
+		S_AXI_RRESP	         : out std_logic_vector(1 downto 0);                        -- Read response
+		S_AXI_RVALID	     : out std_logic;                                           -- Read valid
+		S_AXI_RREADY	     : in  std_logic                                            -- Read ready
 	);
 end full_radio_v1_0_S00_AXI;
 
@@ -109,26 +60,80 @@ architecture arch_imp of full_radio_v1_0_S00_AXI is
 	---- Signals for user logic register space example
 	--------------------------------------------------
 	---- Number of Slave Registers 4
-	signal slv_reg0	:std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
-	signal slv_reg1	:std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
-	signal slv_reg2	:std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
-	signal slv_reg3	:std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
-	signal slv_reg_rden	: std_logic;
-	signal slv_reg_wren	: std_logic;
-	signal reg_data_out	:std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
-	signal byte_index	: integer;
-	signal aw_en	: std_logic;
+	signal fake_adc_pinc_register : std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
+	signal tuner_pinc_register    : std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
+	signal control_register       : std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
+	signal timer_register         : std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
+	signal slv_reg_rden           : std_logic;
+	signal slv_reg_wren           : std_logic;
+	signal reg_data_out           : std_logic_vector(C_S_AXI_DATA_WIDTH-1 downto 0);
+	signal byte_index             : integer;
+	signal aw_en                  : std_logic;
+	signal fake_adc_dds_valid     : std_logic;
+	signal fake_adc_dds_data      : std_logic_vector(15 downto 0);
+	signal tuner_dds_valid        : std_logic;
+	signal tuner_dds_output_q     : std_logic_vector(15 downto 0);
+	signal tuner_dds_output_i     : std_logic_vector(15 downto 0);
+	signal mixer_output_i         : std_logic_vector(31 downto 0);
+	signal mixer_output_q         : std_logic_vector(31 downto 0);
+	signal filter1_valid          : std_logic;
+	signal filter1_output_i       : std_logic_vector(39 downto 0);
+	signal filter1_output_q       : std_logic_vector(39 downto 0);
+	signal filter2_valid          : std_logic;
+	signal filter2_output_i       : std_logic_vector(39 downto 0);
+	signal filter2_output_q       : std_logic_vector(39 downto 0);
 
-COMPONENT dds_compiler_0
-  PORT (
-    aclk : IN STD_LOGIC;
-    aresetn : IN STD_LOGIC;
-    s_axis_phase_tvalid : IN STD_LOGIC;
-    s_axis_phase_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-    m_axis_data_tvalid : OUT STD_LOGIC;
-    m_axis_data_tdata : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
-  );
-    END COMPONENT;
+	-------------------------------------------------------------
+	-- Component Declarations
+	-------------------------------------------------------------
+
+    -- Fake-ADC DDS
+	component dds_compiler_0
+		port (
+			aclk                : in  std_logic;                     -- 
+			aresetn             : in  std_logic;                     -- 
+			s_axis_phase_tvalid : in  std_logic;                     -- 
+			s_axis_phase_tdata  : in  std_logic_vector(31 downto 0); -- 
+			m_axis_data_tvalid  : out std_logic;                     -- 
+			m_axis_data_tdata   : out std_logic_vector(15 downto 0)  -- 
+		);
+	end component;
+	
+	-- Tuner DDS
+	component dds_compiler_1
+		port (
+			aclk                : in  std_logic;                     -- 
+			aresetn             : in  std_logic;                     -- 
+			s_axis_phase_tvalid : in  std_logic;                     -- 
+			s_axis_phase_tdata  : in  std_logic_vector(31 downto 0); -- 
+			m_axis_data_tvalid  : out std_logic;                     -- 
+			m_axis_data_tdata   : out std_logic_vector(31 downto 0)  -- 
+		);
+	end component;
+
+	-- Filter 1
+	component fir_compiler_1
+		port (
+			aclk               : in  std_logic;                     -- 
+			s_axis_data_tvalid : in  std_logic;                     -- 
+			s_axis_data_tready : out std_logic;                     -- 
+			s_axis_data_tdata  : in  std_logic_vector(31 downto 0); -- 
+			m_axis_data_tvalid : out std_logic;                     -- 
+			m_axis_data_tdata  : out std_logic_vector(79 downto 0)  -- 
+		);
+	end component;
+
+	-- Filter 2
+	component fir_compiler_0
+		port (
+			aclk               : in  std_logic;                     -- 
+			s_axis_data_tvalid : in  std_logic;                     -- 
+			s_axis_data_tready : out std_logic;                     -- 
+			s_axis_data_tdata  : in  std_logic_vector(31 downto 0); -- 
+			m_axis_data_tvalid : out std_logic;                     -- 
+			m_axis_data_tdata  : out std_logic_vector(79 downto 0)  -- 
+		);
+	end component;
 
 begin
 	-- I/O Connections assignments
@@ -226,10 +231,9 @@ begin
 	begin
 	  if rising_edge(S_AXI_ACLK) then 
 	    if S_AXI_ARESETN = '0' then
-	      slv_reg0 <= (others => '0');
-	      slv_reg1 <= (others => '0');
-	      slv_reg2 <= (others => '0');
-	      slv_reg3 <= (others => '0');
+	      fake_adc_pinc_register <= (others => '0');
+	      tuner_pinc_register    <= (others => '0');
+	      control_register       <= (others => '0');
 	    else
 	      loc_addr := axi_awaddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB);
 	      if (slv_reg_wren = '1') then
@@ -239,7 +243,7 @@ begin
 	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
 	                -- Respective byte enables are asserted as per write strobes                   
 	                -- slave registor 0
-	                slv_reg0(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
+	                fake_adc_pinc_register(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
 	              end if;
 	            end loop;
 	          when b"01" =>
@@ -247,7 +251,7 @@ begin
 	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
 	                -- Respective byte enables are asserted as per write strobes                   
 	                -- slave registor 1
-	                slv_reg1(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
+	                tuner_pinc_register(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
 	              end if;
 	            end loop;
 	          when b"10" =>
@@ -255,22 +259,13 @@ begin
 	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
 	                -- Respective byte enables are asserted as per write strobes                   
 	                -- slave registor 2
-	                slv_reg2(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
-	              end if;
-	            end loop;
-	          when b"11" =>
-	            for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8-1) loop
-	              if ( S_AXI_WSTRB(byte_index) = '1' ) then
-	                -- Respective byte enables are asserted as per write strobes                   
-	                -- slave registor 3
-	                slv_reg3(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
+	                control_register(byte_index*8+7 downto byte_index*8) <= S_AXI_WDATA(byte_index*8+7 downto byte_index*8);
 	              end if;
 	            end loop;
 	          when others =>
-	            slv_reg0 <= slv_reg0;
-	            slv_reg1 <= slv_reg1;
-	            slv_reg2 <= slv_reg2;
-	            slv_reg3 <= slv_reg3;
+	            fake_adc_pinc_register <= fake_adc_pinc_register;
+	            tuner_pinc_register    <= tuner_pinc_register;
+	            control_register       <= control_register;
 	        end case;
 	      end if;
 	    end if;
@@ -358,20 +353,20 @@ begin
 	-- and the slave is ready to accept the read address.
 	slv_reg_rden <= axi_arready and S_AXI_ARVALID and (not axi_rvalid) ;
 
-	process (slv_reg0, slv_reg1, slv_reg2, slv_reg3, axi_araddr, S_AXI_ARESETN, slv_reg_rden)
+	process (fake_adc_pinc_register, tuner_pinc_register, control_register, timer_register, axi_araddr, S_AXI_ARESETN, slv_reg_rden)
 	variable loc_addr :std_logic_vector(OPT_MEM_ADDR_BITS downto 0);
 	begin
 	    -- Address decoding for reading registers
 	    loc_addr := axi_araddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB);
 	    case loc_addr is
 	      when b"00" =>
-	        reg_data_out <= slv_reg0;
+	        reg_data_out <= fake_adc_pinc_register;
 	      when b"01" =>
-	        reg_data_out <= x"DEADBEEF";
+	        reg_data_out <= tuner_pinc_register;
 	      when b"10" =>
-	        reg_data_out <= slv_reg2;
+	        reg_data_out <= control_register;
 	      when b"11" =>
-	        reg_data_out <= slv_reg3;
+	        reg_data_out <= timer_register;
 	      when others =>
 	        reg_data_out  <= (others => '0');
 	    end case;
@@ -395,20 +390,74 @@ begin
 	  end if;
 	end process;
 
+	-------------------------------------------------------------
+	-- Timer Process
+	-------------------------------------------------------------
+	process( S_AXI_ACLK ) is
+	begin
+		if (rising_edge (S_AXI_ACLK)) then
+			if (S_AXI_ARESETN = '0') then
+				timer_register  <= (others => '0');
+			else
+				timer_register  <= timer_register + '1';
+			end if;
+		end if;
+	end process;
 
-	-- Add user logic here
+	-------------------------------------------------------------
+	-- Component Instantiations
+	-------------------------------------------------------------
+	u_source_signal : dds_compiler_0
+		port map (
+			aclk                => S_AXI_ACLK,               -- in  std_logic;
+			aresetn             => not(control_register(0)), -- in  std_logic;
+			s_axis_phase_tvalid => '1',                      -- in  std_logic;
+			s_axis_phase_tdata  => fake_adc_pinc_register,   -- in  std_logic_vector(31 downto 0);
+			m_axis_data_tvalid  => fake_adc_dds_valid,       -- out std_logic;
+			m_axis_data_tdata   => fake_adc_dds_data         -- out std_logic_vector(15 downto 0)
+		);
 
-your_instance_name : dds_compiler_0
-  PORT MAP (
-    aclk => s_axi_aclk,
-    aresetn => '1',
-    s_axis_phase_tvalid => '1',
-    s_axis_phase_tdata => slv_reg0,
-    m_axis_data_tvalid => m_axis_tvalid,
-    m_axis_data_tdata => m_axis_tdata
-  );
+	u_tune_signal : dds_compiler_1
+		port map (
+			aclk                            => S_AXI_ACLK,               -- in  std_logic;
+			aresetn                         => not(control_register(0)), -- in  std_logic;
+			s_axis_phase_tvalid             => '1',                      -- in  std_logic;
+			s_axis_phase_tdata              => tuner_pinc_register,      -- in  std_logic_vector(31 downto 0);
+			m_axis_data_tvalid              => tuner_dds_valid,          -- out std_logic;
+			m_axis_data_tdata(31 downto 16) => tuner_dds_output_q,       -- out std_logic_vector(31 downto 0);
+			m_axis_data_tdata(15 downto  0) => tuner_dds_output_i        -- out std_logic_vector(31 downto 0);
+		);
+
+	mixer_output_i <= std_logic_vector(signed(fake_adc_dds_data) * signed(tuner_dds_output_i)); --
+	mixer_output_q <= std_logic_vector(signed(fake_adc_dds_data) * signed(tuner_dds_output_q)); -- 
+
+	u_filter_1 : fir_compiler_1
+		port map(
+			aclk                            => S_AXI_ACLK,                   -- in  std_logic;
+			s_axis_data_tvalid              => fake_adc_dds_valid,           -- in  std_logic;
+			s_axis_data_tready              => open,                         -- out std_logic;
+			s_axis_data_tdata(31 downto 16) => mixer_output_i(29 downto 14), -- in  std_logic_vector(31 downto 0);
+			s_axis_data_tdata(15 downto  0) => mixer_output_q(29 downto 14), -- in  std_logic_vector(31 downto 0);
+			m_axis_data_tvalid              => filter1_valid,                -- out std_logic;
+			m_axis_data_tdata(79 downto 40) => filter1_output_i,             -- out std_logic_vector(79 downto 0) 
+			m_axis_data_tdata(39 downto  0) => filter1_output_q              -- out std_logic_vector(79 downto 0) 
+		);
+
+	u_filter_2 : fir_compiler_0
+		port map (
+			aclk                            => S_AXI_ACLK,                     -- in  std_logic;
+			s_axis_data_tvalid              => filter1_valid,                  -- in  std_logic;
+			s_axis_data_tready              => open,                           -- out std_logic;
+			s_axis_data_tdata(31 downto 16) => filter1_output_i(35 downto 20), -- in  std_logic_vector(31 downto 0);
+			s_axis_data_tdata(15 downto  0) => filter1_output_q(35 downto 20), -- in  std_logic_vector(31 downto 0);
+			m_axis_data_tvalid              => filter2_valid,                  -- out std_logic;
+			m_axis_data_tdata(79 downto 40) => filter2_output_i,               -- out std_logic_vector(79 downto 0) 
+			m_axis_data_tdata(39 downto  0) => filter2_output_q                -- out std_logic_vector(79 downto 0) 
+		);
 
 
-	-- User logic ends
+	M_AXIS_TVALID              <= filter2_valid;
+	M_AXIS_TDATA(31 downto 16) <= filter2_output_q(36 downto 21);
+	M_AXIS_TDATA(15 downto  0) <= filter2_output_i(36 downto 21); 
 
 end arch_imp;
